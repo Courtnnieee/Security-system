@@ -1,0 +1,62 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #390982;
+    background-image: url("images/mdxApp.png");
+    background-repeat: no-repeat;
+    background-position: center 70px;
+    background-size: cover;
+}
+
+/* Dark purple header */
+.header {
+    background: #2a0f45;   /* darker purple */
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.header img {
+    height: 45px;
+}
+
+/* Container positioned over NSS area */
+.container {
+    position: absolute;
+    bottom: 40px;
+    left: 361px;
+}
+
+/* Square button */
+.tile.safety {
+    width: 218px;
+    height: 225px;
+    background: #e6005c;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 22px;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 0px;
+}
+
+/* Modal */
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: white;
+    padding: 20px;
+    width: 400px;
+    border-radius: 6px;
+}

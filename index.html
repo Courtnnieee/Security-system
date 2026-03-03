@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Campus Safety</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+<div class="container">
+    <div class="tile safety" onclick="openAlert()">Campus Safety</div>
+</div>
+
+<!-- Alert Modal -->
+<div class="modal" id="alertModal">
+    <div class="modal-content" id="step1">
+        <h2>Campus Safety Alert</h2>
+        <button onclick="confirmAlert()">Confirm Alert</button>
+    </div>
+
+    <div class="modal-content" id="step2" style="display:none;">
+        <h3>Select Risk Level</h3>
+        <div class="risk-buttons">
+            <button class="high" onclick="setRisk('High Risk')">High Risk</button>
+            <button class="mid" onclick="setRisk('Mid Risk')">Mid Risk</button>
+            <button class="low" onclick="setRisk('Low Risk')">Low Risk</button>
+        </div>
+
+        <textarea id="description" placeholder="Describe situation..." style="width:100%; height:60px;"></textarea>
+        <button class="submit-btn" onclick="submitAlert()">Send Alert and Connect</button>
+    </div>
+
+    <div class="modal-content" id="step3" style="display:none;">
+        <h3>Live Chat - Campus Security</h3>
+        <div class="chat-box" id="chatBox">
+            <div class="chat-message agent">Security: Alert received.</div>
+            <div class="chat-message agent">Security: Can you confirm your location?</div>
+        </div>
+        <input type="text" id="chatInput" placeholder="Type message..." style="width:80%;">
+        <button onclick="sendMessage()">Send</button>
+    </div>
+</div>
+
+<script>
+let selectedRisk = "";
+
+function openAlert() {
+    document.getElementById("alertModal").style.display = "flex";
+}
+
+function confirmAlert() {
+    document.getElementById("step1").style.display = "none";
+    document.getElementById("step2").style.display = "block";
+}
+
+function setRisk(risk) {
+    selectedRisk = risk;
+    alert("Selected: " + risk);
+}
+
+function submitAlert() {
+    if (!selectedRisk) {
+        alert("Please select risk level");
+        return;
+    }
+
+    document.getElementById("step2").style.display = "none";
+    document.getElementById("step3").style.display = "block";
+}
+
+function sendMessage() {
+    let input = document.getElementById("chatInput");
+    let chatBox = document.getElementById("chatBox");
+
+    if (input.value.trim() === "") return;
+
+    let userMsg = document.createElement("div");
+    userMsg.classList.add("chat-message", "user");
+    userMsg.innerHTML = "You: " + input.value;
+    chatBox.appendChild(userMsg);
+
+    input.value = "";
+
+    setTimeout(() => {
+        let reply = document.createElement("div");
+        reply.classList.add("chat-message", "agent");
+        reply.innerHTML = "Security: Help is on the way. Stay where you are.";
+        chatBox.appendChild(reply);
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }, 1000);
+}
+</script>
+
+</body>
+</html>
