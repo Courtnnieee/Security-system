@@ -13,85 +13,97 @@
     <div class="tile safety" onclick="openAlert()">Campus Safety</div>
 </div>
 
-<!-- Alert Modal -->
-<div class="modal" id="alertModal">
-    <div class="modal-content" id="step1">
-        <h2>Campus Safety Alert</h2>
-        <button onclick="confirmAlert()">Confirm Alert</button>
-    </div>
+<!-- Alert Modal and Live Chat Panel -->
 
-    <div class="modal-content" id="step2" style="display:none;">
-        <h3>Select Risk Level</h3>
-        <div class="risk-buttons">
-            <button class="high" onclick="setRisk('High Risk')">High Risk</button>
-            <button class="mid" onclick="setRisk('Mid Risk')">Mid Risk</button>
-            <button class="low" onclick="setRisk('Low Risk')">Low Risk</button>
+<article class="chat-overlay hidden" id="chatOverlay" aria-live="polite">
+  <header class="chat-header">
+    <div>
+      <h2>Live Chat - Campus Security</h2>
+      <p id="riskBadge"></p>
+    </div>
+    <div class="call-controls">
+      <button type="button" id="audioCallBtn" class="call-btn">Audio Call</button>
+      <button type="button" id="videoCallBtn" class="call-btn">Video Call</button>
+      <button id="closeChatBtn" class="close-btn" title="Close Chat">✖</button>
+    </div>
+  </header>
+  <p class="call-status" id="callStatus">Chat mode active</p>
+  <div class="chat-layout">
+    <div class="chat-main">
+      <div class="chat-body" id="chatBody"></div>
+      <form id="chatForm" class="chat-input-row">
+        <input id="chatInput" type="text" placeholder="Type your message..." autocomplete="off"/>
+        <button type="submit">Send</button>
+      </form>
+    </div>
+    <aside class="location-card" id="locationCard">
+      <h3>Responder Location Feed</h3>
+      <div class="map-box">
+        <div class="accuracy-ring" id="accuracyRing"></div>
+        <div class="map-pin" id="mapPin"></div>
+      </div>
+      <dl class="location-meta">
+        <div>
+          <dt>Coordinates</dt>
+          <dd id="coordsValue">Pending...</dd>
         </div>
-
-        <textarea id="description" placeholder="Describe situation..." style="width:100%; height:60px;"></textarea>
-        <button class="submit-btn" onclick="submitAlert()">Send Alert and Connect</button>
-    </div>
-
-    <div class="modal-content" id="step3" style="display:none;">
-        <h3>Live Chat - Campus Security</h3>
-        <div class="chat-box" id="chatBox">
-            <div class="chat-message agent">Security: Alert received.</div>
-            <div class="chat-message agent">Security: Can you confirm your location?</div>
+        <div>
+          <dt>Accuracy Radius</dt>
+          <dd id="accuracyValue">Pending...</dd>
         </div>
-        <input type="text" id="chatInput" placeholder="Type message..." style="width:80%;">
-        <button onclick="sendMessage()">Send</button>
-    </div>
+        <div>
+          <dt>Last Updated</dt>
+          <dd id="timestampValue">Pending...</dd>
+        </div>
+      </dl>
+    </aside>
+  </div>
+</article>
+
+<div class="modal-backdrop hidden" id="alertModal" role="dialog" aria-modal="true">
+  <div class="modal">
+    <h2>Campus Safety Alert</h2>
+    <h3>Confirm Alert</h3>
+
+    <section id="confirmStage">
+      <label class="terms-check">
+        <input type="checkbox" id="termsAccepted" />
+        <span>I accept the Terms and Conditions.</span>
+      </label>
+
+      <div class="terms-box">
+        Please use this service responsibly. False reports are taken seriously.
+      </div>
+
+      <button id="confirmAlertBtn" class="primary" disabled>Confirm Alert</button>
+    </section>
+
+   <section id="detailsStage" class="hidden">
+  <div class="risk-grid" id="riskGrid">
+    <button class="risk-btn" data-risk="High">High Risk (Emergency)</button>
+    <button class="risk-btn" data-risk="Mid">Mid Risk (Incident)</button>
+    <button class="risk-btn" data-risk="Low">Low Risk (Concern)</button>
+  </div>
+
+  <label for="situation" class="field-label">Describe the situation</label>
+  <textarea
+    id="situation"
+    rows="4"
+    placeholder="Briefly describe what happened and where..."
+  ></textarea>
+
+  <button id="submitDetailsBtn" class="primary" disabled>Submit</button>
+</section>
+
+    <section id="sendStage" class="hidden">
+      <div class="terms-box" id="alertSummary"></div>
+      <button id="sendAlertBtn" class="primary">
+        Send Alert and Connect to Live Chat
+      </button>
+    </section>
+  </div>
 </div>
 
-<script>
-let selectedRisk = "";
-
-function openAlert() {
-    document.getElementById("alertModal").style.display = "flex";
-}
-
-function confirmAlert() {
-    document.getElementById("step1").style.display = "none";
-    document.getElementById("step2").style.display = "block";
-}
-
-function setRisk(risk) {
-    selectedRisk = risk;
-    alert("Selected: " + risk);
-}
-
-function submitAlert() {
-    if (!selectedRisk) {
-        alert("Please select risk level");
-        return;
-    }
-
-    document.getElementById("step2").style.display = "none";
-    document.getElementById("step3").style.display = "block";
-}
-
-function sendMessage() {
-    let input = document.getElementById("chatInput");
-    let chatBox = document.getElementById("chatBox");
-
-    if (input.value.trim() === "") return;
-
-    let userMsg = document.createElement("div");
-    userMsg.classList.add("chat-message", "user");
-    userMsg.innerHTML = "You: " + input.value;
-    chatBox.appendChild(userMsg);
-
-    input.value = "";
-
-    setTimeout(() => {
-        let reply = document.createElement("div");
-        reply.classList.add("chat-message", "agent");
-        reply.innerHTML = "Security: Help is on the way. Stay where you are.";
-        chatBox.appendChild(reply);
-        chatBox.scrollTop = chatBox.scrollHeight;
-    }, 1000);
-}
-</script>
-
+<script src="/app.js"></script>
 </body>
 </html>
